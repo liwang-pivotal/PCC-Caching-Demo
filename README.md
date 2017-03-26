@@ -6,12 +6,12 @@ You will build a service that requests customer information from a CloudFoundry 
 
 The Customer Search service has the following APIs:
 
-`- GET /api/showcache`          - get all customer info in PCC
-`- GET /api/clearcache`         - remove all customer info in PCC
-`- GET /api/showdb`  	- get all customer info in MySQL
-`- GET /api/cleardb`         - remove all customer info in MySQL
-`- GET /api/loaddb`         - load 500 customer info into MySQL
-`- GET /api/customerSearch?email={email}`   - get specific customer info
+`- GET /api/showcache`          - get all customer info in PCC  
+`- GET /api/clearcache`         - remove all customer info in PCC  
+`- GET /api/showdb`  	- get all customer info in MySQL  
+`- GET /api/cleardb`         - remove all customer info in MySQL  
+`- GET /api/loaddb`         - load 500 customer info into MySQL  
+`- GET /api/customerSearch?email={email}`   - get specific customer info  
 
 #### What you will need
 - About 30 minutes
