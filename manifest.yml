@@ -1,0 +1,8 @@
+---
+applications:
+- name: cache-demo
+  random-route: true
+  path: target/cache-demo-0.0.1-SNAPSHOT.jar
+  services:
+  - test-pcc
+  - test-mysql
