@@ -31,12 +31,12 @@ public class CustomerController {
 	public String home() {
 		return "Customer Search Service -- Available APIs: <br/>"
 				+ "<br/>"
-				+ "GET /api/showcache    	               - get all customer info in PCC<br/>"
-				+ "GET /api/clearcache                     - remove all customer info in PCC<br/>"
-				+ "GET /api/showdb  	                   - get all customer info in MySQL<br/>"
-				+ "GET /api/cleardb                        - remove all customer info in MySQL<br/>"
-				+ "GET /api/loaddb                         - load 500 customer info into MySQL<br/>"
-				+ "GET /api/customerSearch?email={email}   - get specific customer info<br/>";
+				+ "GET /showcache    	               - get all customer info in PCC<br/>"
+				+ "GET /clearcache                     - remove all customer info in PCC<br/>"
+				+ "GET /showdb  	                   - get all customer info in MySQL<br/>"
+				+ "GET /cleardb                        - remove all customer info in MySQL<br/>"
+				+ "GET /loaddb                         - load 500 customer info into MySQL<br/>"
+				+ "GET /customerSearch?email={email}   - get specific customer info<br/>";
 	}
 
 	@RequestMapping(method = RequestMethod.GET, path = "/showcache")
