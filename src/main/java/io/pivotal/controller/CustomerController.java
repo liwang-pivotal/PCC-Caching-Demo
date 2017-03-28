@@ -7,22 +7,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.pivotal.dao.CustomerDAO;
+import io.codearte.jfairy.Fairy;
+import io.codearte.jfairy.producer.person.Person;
 import io.pivotal.domain.Customer;
-import io.pivotal.repo.CustomerPCCRepository;
 import io.pivotal.service.CustomerSearchService;
 
 @RestController
 public class CustomerController {
 	
 	@Autowired
-	private CustomerPCCRepository repository;
+	io.pivotal.repo.pcc.CustomerRepository pccCustomerRepository;
+	
+	@Autowired
+	io.pivotal.repo.jpa.CustomerRepository jpaCustomerRepository; 
 	
 	@Autowired
 	CustomerSearchService customerSearchService;
 	
-	@Autowired
-	CustomerDAO customerDao;
+	Fairy fairy = Fairy.create();
+	
 	
 	@RequestMapping("/")
 	public String home() {
@@ -41,7 +44,7 @@ public class CustomerController {
 	public String show() throws Exception {
 		StringBuilder result = new StringBuilder();
 		
-		repository.findAll().forEach(item->result.append(item+"<br/>"));
+		pccCustomerRepository.findAll().forEach(item->result.append(item+"<br/>"));
 
 		return result.toString();
 	}
@@ -49,7 +52,7 @@ public class CustomerController {
 	@RequestMapping(method = RequestMethod.GET, path = "/clearcache")
 	@ResponseBody
 	public String clearCache() throws Exception {
-		repository.deleteAll();
+		pccCustomerRepository.deleteAll();
 		return "Region cleared";
 	}
 	
@@ -58,7 +61,7 @@ public class CustomerController {
 	public String showDB() throws Exception {
 		StringBuilder result = new StringBuilder();
 		
-		customerDao.getAll().forEach(item->result.append(item+"<br/>"));
+		jpaCustomerRepository.findAll().forEach(item->result.append(item+"<br/>"));
 		
 		return result.toString();
 	}
@@ -67,7 +70,11 @@ public class CustomerController {
 	@ResponseBody
 	public String loadDB() throws Exception {
 		
-		customerDao.save(500);
+		for (int i=0; i<500; i++) {
+			Person person = fairy.person();
+			Customer customer = new Customer(person.passportNumber(), person.fullName(), person.email(), person.getAddress().toString(), person.dateOfBirth().toString());
+			jpaCustomerRepository.save(customer);
+		}
 		
 		return "New 500 customers successfully saved into Database";
 	}
@@ -76,7 +83,7 @@ public class CustomerController {
 	@ResponseBody
 	public String clearDB() throws Exception {
 		
-		customerDao.removeAll();
+		jpaCustomerRepository.deleteAll();
 		
 		return "Database cleared";
 	}
@@ -85,9 +92,10 @@ public class CustomerController {
 	public String searchCustomerByEmail(@RequestParam(value = "email", required = true) String email) {
 		
 		long startTime = System.currentTimeMillis();
-		Customer customer = customerSearchService.getCustomerByEmailId(email);
+		Customer customer = customerSearchService.getCustomerByEmail(email);
 		long elapsedTime = System.currentTimeMillis();
 
 		return String.format("\"%1$s\"<br/>Cache Miss [%2$s]<br/>Elapsed Time [%3$s ms]%n", customer, customerSearchService.isCacheMiss(), (elapsedTime - startTime));
 	}
+	
 }

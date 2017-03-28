@@ -23,6 +23,26 @@ import org.springframework.data.gemfire.support.GemfireCacheManager;
 @EnableCaching
 public class DemoConfig {
 	
+//	public ServiceConnectorConfig createGemfireConnectorConfig() {
+//
+//        GemfireServiceConnectorConfig gemfireConfig = new GemfireServiceConnectorConfig();
+//        gemfireConfig.setPoolSubscriptionEnabled(true);
+//        gemfireConfig.setPdxSerializer(new ReflectionBasedAutoSerializer(".*"));
+//        gemfireConfig.setPdxReadSerialized(false);
+//
+//        return gemfireConfig;
+//    }
+//    
+//	@Bean(name = "gemfireCache")
+//    public ClientCache getGemfireClientCache() throws Exception {		
+//		
+//		Cloud cloud = new CloudFactory().getCloud();
+//		ClientCache clientCache = cloud.getServiceConnector("test-pcc", ClientCache.class,  createGemfireConnectorConfig());
+//
+//        return clientCache;
+//    }
+	
+	
 	@Bean(name = "gemfireCache")
 	public ClientCache clientCache() throws Exception {
         Properties props = new Properties();
@@ -43,6 +63,7 @@ public class DemoConfig {
 
 		return clientCache;
 	}
+
 
 	@Bean(name = "customer")
 	public Region<String, Customer> customerRegion(@Autowired ClientCache clientCache) {
