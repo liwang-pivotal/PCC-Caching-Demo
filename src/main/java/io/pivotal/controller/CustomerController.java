@@ -1,5 +1,8 @@
 package io.pivotal.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -70,11 +73,15 @@ public class CustomerController {
 	@ResponseBody
 	public String loadDB() throws Exception {
 		
+		List<Customer> customers = new ArrayList<>();
+		
 		for (int i=0; i<500; i++) {
 			Person person = fairy.person();
 			Customer customer = new Customer(person.passportNumber(), person.fullName(), person.email(), person.getAddress().toString(), person.dateOfBirth().toString());
-			jpaCustomerRepository.save(customer);
+			customers.add(customer);
 		}
+		
+		jpaCustomerRepository.save(customers);
 		
 		return "New 500 customers successfully saved into Database";
 	}
@@ -94,8 +101,13 @@ public class CustomerController {
 		long startTime = System.currentTimeMillis();
 		Customer customer = customerSearchService.getCustomerByEmail(email);
 		long elapsedTime = System.currentTimeMillis();
+		Boolean isCacheMiss = customerSearchService.isCacheMiss();
+		String sourceFrom = isCacheMiss ? "MySQL" : "PCC";
 
-		return String.format("\"%1$s\"<br/>Cache Miss [%2$s]<br/>Elapsed Time [%3$s ms]%n", customer, customerSearchService.isCacheMiss(), (elapsedTime - startTime));
+		return String.format("Result [<b>%1$s</b>] <br/>"
+				+ "Cache Miss [<b>%2$s</b>] <br/>"
+				+ "Read from [<b>%3$s</b>] <br/>"
+				+ "Elapsed Time [<b>%4$s ms</b>]%n", customer, isCacheMiss, sourceFrom, (elapsedTime - startTime));
 	}
 	
 }

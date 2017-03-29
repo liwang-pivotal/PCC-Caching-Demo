@@ -18,7 +18,10 @@ import org.springframework.cloud.config.java.AbstractCloudConfig;
 import org.springframework.cloud.service.ServiceConnectorConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.gemfire.support.GemfireCacheManager;
+import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 @Configuration
 @EnableCaching
@@ -26,7 +29,14 @@ public class DemoConfig extends AbstractCloudConfig {
 	
 	@Bean
 	public DataSource dataSource() {
-	    return connectionFactory().dataSource();
+		DataSource dataSource = connectionFactory().dataSource();
+		
+		ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
+        databasePopulator.addScript(new ClassPathResource("sql/create_table.sql"));
+        
+        DatabasePopulatorUtils.execute(databasePopulator, dataSource);
+        
+        return dataSource;
 	}
 	
 	public ServiceConnectorConfig createGemfireConnectorConfig() {
