@@ -12,7 +12,7 @@ The Customer Search service has the following APIs:
 `- GET /api/showdb`  	- get all customer info in MySQL  
 `- GET /api/cleardb`         - remove all customer info in MySQL  
 `- GET /api/loaddb`         - load 500 customer info into MySQL  
-`- GET /api/customerSearch?email={email}`   - get specific customer info  
+`- GET /api/customerSearch?id={id}`   - get specific customer info  
   
   
 #### What you will need

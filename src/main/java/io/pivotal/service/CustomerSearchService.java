@@ -27,11 +27,11 @@ public class CustomerSearchService {
 	}
 	
 	@Cacheable(value = "customer")
-	public Customer getCustomerByEmail(String email) {
+	public Customer getCustomerById(String id) {
 		
 		setCacheMiss();
 
-		Customer customer = jpaCustomerRepository.findByEmail(email);
+		Customer customer = jpaCustomerRepository.findById(id);
 
 		return customer;
 	}
